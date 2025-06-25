@@ -52,38 +52,11 @@ public class CourseService {
     public void deleteCourse(Long courseId) {
         courseRepository.deleteById(courseId);
     }
-
-    // 在CourseService.java中添加
-    // 修改：添加 Pageable 参数
-    public Page<Course> getCoursesByTeacherPaged(Long teacherId, Pageable pageable) {
-        return courseRepository.findByTeacherId(teacherId, pageable);
-    }
-
-    // 修复搜索方法
-// 添加安全的搜索方法
-    public Page<Course> searchCourses(Long teacherId, String keyword, Pageable pageable) {
-        // 验证并清理关键词
-        if (keyword == null || keyword.trim().isEmpty()) {
-            // 如果关键词无效，返回所有课程
-            return getCoursesByTeacherPaged(teacherId, pageable);
-        }
-
-        // 清理关键词中的潜在问题字符
-        String safeKeyword = keyword.trim()
-                .replaceAll("[^\\w\\s\\p{L}]", "") // 移除非字母数字和空格
-                .toLowerCase();
-
-        if (safeKeyword.isEmpty()) {
-            // 如果清理后关键词为空，返回所有课程
-            return getCoursesByTeacherPaged(teacherId, pageable);
-        }
-
-        // 使用安全的关键词查询
-        return courseRepository.findByTeacherIdAndKeyword(teacherId, safeKeyword, pageable);
-    }
-    
     public List<Course> getCoursesByTeacher(Long teacherId) {
         return courseRepository.findByTeacherId(teacherId);
     }
+
+
+
 }
 

@@ -14,19 +14,19 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
     // 非分页方法
-    List<Course> findByTeacherId(Long teacherId);
+    @Query("SELECT c FROM Course c WHERE c.teacherId = :teacherId")
+    List<Course> findByTeacherId(@Param("teacherId") Long teacherId);
 
-    // 分页方法
-    Page<Course> findByTeacherId(Long teacherId, Pageable pageable);
-
-    // 搜索方法（分页）
-    @Query("SELECT c FROM Course c WHERE " +
-            "c.teacherId = :teacherId AND " +
-            "(LOWER(c.code) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            " LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            " LOWER(c.term) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    Page<Course> findByTeacherIdAndKeyword(
+    // 添加自定义搜索方法
+    @Query("SELECT c FROM Course c WHERE c.teacherId = :teacherId " +
+            "AND (LOWER(c.code) LIKE %:keyword% " +
+            "OR LOWER(c.name) LIKE %:keyword% " +
+            "OR LOWER(c.term) LIKE %:keyword% " +
+            "OR LOWER(c.description) LIKE %:keyword%)")
+    List<Course> findByTeacherIdAndKeyword(
             @Param("teacherId") Long teacherId,
-            @Param("keyword") String keyword,
-            Pageable pageable);
+            @Param("keyword") String keyword);
+
+    @Query("SELECT c.courseId FROM Course c WHERE c.teacherId = :teacherId")
+    List<Integer> findIdsByTeacherId(@Param("teacherId") Integer teacherId);
 }

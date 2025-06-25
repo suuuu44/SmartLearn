@@ -13,11 +13,9 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courseId;
 
-    private Long teacherId;
     @Column(name = "code")
     private String code;
     private String name;
-
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -32,4 +30,7 @@ public class Course {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
+
+    @Column(name = "teacher_id")
+    private Long teacherId;
 }

@@ -1,5 +1,6 @@
 package com.example.smartlearn.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,4 +25,6 @@ public class User {
     public enum Role {
         teacher, student // 保持小写与数据库一致
     }
+
+
 }
